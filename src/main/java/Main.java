@@ -230,7 +230,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        System.out.printf("Testing %d %s tables\n", dbPaths);
+        System.out.printf("Testing %d %s tables\n", dbPaths.size(), table);
         try {
             testMultiThread(dbPaths);
         } catch (InterruptedException|ExecutionException e) {
