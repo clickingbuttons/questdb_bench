@@ -186,7 +186,7 @@ public class Main {
         for (Future<Long> result : results) {
             sum += result.get();
         }
-        System.out.printf("\nCompleted ms: %d, total symbols %d\n", System.currentTimeMillis() - startTime, sum);
+        System.out.printf("\nCompleted ms: %d, total trades %d\n", System.currentTimeMillis() - startTime, sum);
     }
 
     public static void testMultiThread(List<String> dbPaths) throws InterruptedException, ExecutionException {
