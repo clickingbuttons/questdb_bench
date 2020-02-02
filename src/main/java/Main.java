@@ -156,7 +156,8 @@ class PopulateTestTableTask implements Runnable {
                                 " abs(rnd_int()) size," +
                                 " abs(rnd_int()) conditions," +
                                 " rnd_byte(2, 50) exchange," +
-                                " timestamp_sequence(to_timestamp(1420171200011000), (1420596000000000 - 1420171200011000) / %s) ts" +
+                                // [2015-01-02 5am, 2015-01-06 9pm]
+                                " timestamp_sequence(to_timestamp(1420171200011000), (1420578000000000 - 1420171200011000) / %s) ts" +
                                 " from" +
                                 " long_sequence(%s)" +
                                 ") timestamp(ts) partition by DAY",
