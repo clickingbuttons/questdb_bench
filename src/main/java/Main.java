@@ -143,8 +143,10 @@ class PopulateTestTableTask implements Runnable {
         SqlCompiler compiler = new SqlCompiler(engine);
         try {
             compiler.compile(String.format("select * from %s limit 1", table));
+            System.out.printf("Table %s already exists, skipping\n", table);
         } catch (SqlException e) {
             if (e.getMessage().contains("does not exist")) {
+                System.out.printf("Populating 1 week (5 partitions) in %s at %s\n", table, dbPath);
                 String query = String.format(
                         "create table %s as " +
                                 "(" +
@@ -154,9 +156,9 @@ class PopulateTestTableTask implements Runnable {
                                 " abs(rnd_int()) size," +
                                 " abs(rnd_int()) conditions," +
                                 " rnd_byte(2, 50) exchange," +
-                                " timestamp_sequence(to_timestamp(1420171200011000), (1420693200000000 - 1420171200011000) / %s) ts" +
+                                " timestamp_sequence(to_timestamp(1420171200011000), (1420596000000000 - 1420171200011000) / %s) ts" +
                                 " from" +
-                                " long_sequence(%s)" + //
+                                " long_sequence(%s)" +
                                 ") timestamp(ts) partition by DAY",
                         table, rowCount, rowCount);
                 try {
@@ -166,11 +168,7 @@ class PopulateTestTableTask implements Runnable {
                     System.exit(1);
                 }
             }
-            else {
-                System.out.printf("Table %s already exists, skipping\n", table);
-            }
         }
-
     }
 }
 
@@ -216,9 +214,8 @@ public class Main {
             File directory = new File(dbPath);
             if (!directory.exists()) {
                 directory.mkdir();
-                System.out.printf("Populating 1 week (5 partitions) in %s at %s\n", table, dbPath);
-                tasks.add(new PopulateTestTableTask(table, dbPath));
             }
+            tasks.add(new PopulateTestTableTask(table, dbPath));
         }
         for (Runnable task : tasks) {
             pool.execute(task);
